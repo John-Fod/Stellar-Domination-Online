@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>StellarDomination</title>
+
+    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+    <%= csrf_meta_tags %>
+  </head>
+
+  <body>
+
+
+    <section id="masthead">
+      <header id="global-header">
+        <%= react_component 'GlobalHeader', { user: logged_in_user } %>
+      </header>
+    </section>
+    <%= yield %>
+
+    <footer>
+      <% if logged_in_user %>
+        <h6>User <%= logged_in_user.username %> is logged in.</h6>
+      <% else %>
+        <h6>No user is logged in</h6>
+      <% end %>
+    </footer>
+  </body>
+</html>
