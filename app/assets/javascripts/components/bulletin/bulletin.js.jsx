@@ -6,10 +6,10 @@ class Bulletin extends React.Component {
 
   render() {
     return (
-      <div className={this.props.type}>
-        <h4>{this.props.title}</h4>
+      <div className={this.props.bulletin.type}>
+        <h4>{this.props.bulletin.title}</h4>
         <ul>
-          {this.props.messages.map(function(curMessage){
+          {this.props.bulletin.messages.map(function(curMessage){
           	return <li key={curMessage}>{curMessage}</li>
           })}
         </ul>

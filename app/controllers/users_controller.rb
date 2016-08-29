@@ -1,51 +1,99 @@
 class UsersController < ApplicationController
 
 
+
   def index
      @users = User.all
   end
 
 
+
   def login
+    response = Hash.new
     @user = User.authenticate(params[:credentials][:identification], params[:credentials][:password])
+    response['bulletin'] = Hash.new
+    response["bulletin"]["messages"] = []
     if @user
+      #---------------
+      #--Login Success
+      response['user'] = @user
+      response['games'] = @user.hosting
+      response["bulletin"]["type"] = "notification"
+      response["bulletin"]["title"] = "Welcome #{@user.username}."
+      response["bulletin"]["messages"].push("You have been logged in successfully.")
       #--Log the user in
       if params[:remember_me]
         cookies.permanent[:auth_token] = user.auth_token
       else
         cookies[:auth_token] = @user.auth_token
       end
-      #--Send the user information back
-      render json: @user
     else
-      render json: {'errors' => 'Identification and password do not match.'}
+      #---------------
+      #--Login Failure
+      response["bulletin"]["type"] = "error"
+      response["bulletin"]["title"] = "Login Failed"
+      response["bulletin"]["messages"].push("Identification and password do not match.")
     end
+    render json: response
 
   end
+
+
 
   def logout
-    @user = logged_in_user if logged_in_user
-    cookies.delete(:auth_token)
-    render json: @user if @user
+    response = Hash.new
+    response["bulletin"] = Hash.new
+    response["bulletin"]["messages"] = []
+    if logged_in_user
+      @user = logged_in_user
+      cookies.delete(:auth_token)
+      response["bulletin"]["type"] = "notification"
+      response["bulletin"]["title"] = "Logout Successfull"
+      response["bulletin"]["messages"].push("You have been logged out.")
+      response["user"] = @user
+    else
+      response["bulletin"]["type"] = "error"
+      response["bulletin"]["title"] = "Logout Failed"
+      response["bulletin"]["messages"].push("You must be logged in to do that.")
+    end
+    render json: response
   end
+
 
 
   def create
     @user = User.new(user_params)
+    response = Hash.new
+    response["bulletin"]
+    response["bulletin"]["messages"] = []
 
     if @user.save
-      #Log the user in
+      #--------------------
+      #--Creation Succeeded
       if params[:remember_me]
         cookies.permanent[:auth_token] = @user.auth_token
       else
         cookies[:auth_token] = @user.auth_token
       end
-      #Return the user as a JSON object
-      render json: @user
+      #--Make the response
+      response["bulletin"]["type"] = "notification"
+      response["bulletin"]["title"] = "New Account Created"
+      response["bulletin"]["messages"].push("Welcome to Stellar Domination #{@user.username}")
+      response["bulletin"]["messages"].push("You have been logged in.")
+      response["user"] = @user
+      render json: response
     else
-      render json: @user.errors, status: unprocessable_entity
+      #-----------------
+      #--Creation Failed
+      response["bulletin"]["type"] = "error"
+      response["bulletin"]["title"] = "Account Creation Failed"
+      @user.errors.each do |error|
+        response["bulletin"]["messages"].push(error)
+      end
+      render json: response, status: unprocessable_entity
     end
   end
+
 
 
   def destroy
@@ -53,6 +101,7 @@ class UsersController < ApplicationController
     @user.destroy
     head :no_content
   end
+
 
 
   private

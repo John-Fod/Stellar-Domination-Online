@@ -11,27 +11,43 @@ class GamesController < ApplicationController
     @game = Game.new(game_params)
     @game.host = logged_in_user
     response = Hash.new
+    response["bulletin"] = Hash.new
+    response["bulletin"]["messages"] = []
     response["game"] = @game
 
     if @game.save
-      #Return the user as a JSON object
-      response["type"] = "notification"
-      response["title"] = "Game Created"
-      response["messages"] = ["New Game #{@game.name} has been created."]
+      response["bulletin"]["type"] = "notification"
+      response["bulletin"]["title"] = "Game Created"
+      response["bulletin"]["messages"].push("New Game #{@game.name} has been created.")
       render json: response
     else
-      response["type"] = "alert"
-      response["title"] = "Validation Failure"
-      response["messages"] = []
+      response["bulletin"]["type"] = "error"
+      response["bulletin"]["title"] = "Game Creation Failed"
       @game.errors.full_messages.each do |new_message|
-        response["messages"] << new_message
+        response["bulletin"]["messages"].push(new_message)
       end
       render json: response
     end
   end
 
   def destroy
+    @game = Game.find(params[:id])
+    response = Hash.new
+    response["game"] = @game
+    response["bulletin"] = Hash.new
 
+    if @game.destroy
+      response["bulletin"]["type"] = "notification"
+      response["bulletin"]["title"] = "Game #{@game.name} Deleted"
+      response["bulletin"]["messages"] = ["#{@game.name} is no longer available."]
+      response["games"] = logged_in_user.hosting
+      render json:response
+    else
+      response["type"] = "alert"
+      response["title"] = "Game #{@game.name} Deletion Failed"
+      response["messages"] = []
+      render json:response
+    end
   end
 
 

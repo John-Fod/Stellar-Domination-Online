@@ -13,10 +13,22 @@ class GlobalHeader extends React.Component {
   handleLogout(e){
   	e.preventDefault();
   	$.post( "/users/logout", function(data) {
-        this.setState({user: null});
+        this.setState({
+          user: null,
+          games: null,
+          bulletin: data.bulletin
+        });
         ReactDOM.render(
           <UserLoginForm handleLogin={this.handleLogin.bind(this)} handleGetLoginInfo={this.handleGetLoginInfo.bind(this)} />,
           document.getElementById('global-header')
+        );
+        ReactDOM.render(
+          <GameMenu {...this.state} />,
+          document.getElementById('game-menu-holder')
+        );
+        ReactDOM.render(
+          <Bulletin bulletin={this.state.bulletin} />,
+          document.getElementById('main-bulletin-holder')
         );
   	}.bind(this))
   	  .done(function(){
@@ -29,16 +41,28 @@ class GlobalHeader extends React.Component {
   handleLogin(e){
     e.preventDefault();
     $.post( "/users/login", { credentials: this.state }, function(data) {
-        this.setState({user: data});
+        this.setState({
+          user: data.user,
+          games: data.games,
+          bulletin: data.bulletin
+        });
         ReactDOM.render(
           <UserHome handleLogout={this.handleLogout.bind(this)} {...this.state} />,
           document.getElementById('global-header')
-      );
+        );
+        ReactDOM.render(
+          <GameMenu {...this.state} />,
+          document.getElementById('game-menu-holder')
+        );
+        ReactDOM.render(
+          <Bulletin bulletin={this.state.bulletin} />,
+          document.getElementById('main-bulletin-holder')
+        );
     }.bind(this))
       .done(function(){
       }.bind(this))
       .fail(function(){
-        alert("fail on login:" + JSON.stringify(this.state));
+        alert("failed on login.");
       })
   }
 
