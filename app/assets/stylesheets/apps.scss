@@ -1,3 +1,50 @@
 // Place all the styles related to the Apps controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+//******************************************
+//--BASIC COLORS
+//--  Used for things like error messages.
+$app-green: rgba(69,152,14,1);
+$app-red: rgba(143, 0, 14, 1);
+
+
+//******************************************
+//--INSTRUMENT COLORS
+$inst-base: rgba(45,51,81,1);
+$inst-border: rgba(18,33,110,1);
+$inst-go: rgba(69,152,1,1);
+$inst-stop: rgba(182,46,0,1);
+$inst-off: rgba(229,75,23,1);
+$inst-text-color: rgba(185,228,247,1);
+
+body{
+  margin:0px;
+  padding:0px;
+}
+
+ul{
+  li{
+    list-style:none;
+  }
+}
+
+//************************************************
+//--INSTRUMENTS
+//--  This is the basic way the user will interact
+//--with the application. They should look like
+//--something found in a spaceship.
+.instrument{
+  background-color:$inst-base;
+  border:2px solid $inst-border;
+  color:$inst-text-color;
+
+  a{
+  	color:$inst-text-color;
+
+  	&:hover{
+  	  color:$inst-off;
+  	}
+  }
+}
+

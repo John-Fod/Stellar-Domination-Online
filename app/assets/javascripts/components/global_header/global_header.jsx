@@ -9,6 +9,14 @@ class GlobalHeader extends React.Component {
 
   }
 
+  componentDidMount() {
+    if(this.props.user){
+      this.setState({
+        user: this.props.user
+      })
+    }
+  }
+
 
   handleLogout(e){
   	e.preventDefault();
@@ -19,17 +27,10 @@ class GlobalHeader extends React.Component {
           bulletin: data.bulletin
         });
         ReactDOM.render(
-          <UserLoginForm handleLogin={this.handleLogin.bind(this)} handleGetLoginInfo={this.handleGetLoginInfo.bind(this)} />,
-          document.getElementById('global-header')
-        );
-        ReactDOM.render(
-          <GameMenu {...this.state} />,
-          document.getElementById('game-menu-holder')
-        );
-        ReactDOM.render(
           <Bulletin bulletin={this.state.bulletin} />,
           document.getElementById('main-bulletin-holder')
         );
+        document.getElementById('game-menu-holder').innerHTML='';
   	}.bind(this))
   	  .done(function(){
   	  }.bind(this))
@@ -47,16 +48,12 @@ class GlobalHeader extends React.Component {
           bulletin: data.bulletin
         });
         ReactDOM.render(
-          <UserHome handleLogout={this.handleLogout.bind(this)} {...this.state} />,
-          document.getElementById('global-header')
-        );
-        ReactDOM.render(
-          <GameMenu {...this.state} />,
-          document.getElementById('game-menu-holder')
-        );
-        ReactDOM.render(
           <Bulletin bulletin={this.state.bulletin} />,
           document.getElementById('main-bulletin-holder')
+        );
+        ReactDOM.render(
+          <GameMenu />,
+          document.getElementById('game-menu-holder')
         );
     }.bind(this))
       .done(function(){
@@ -74,8 +71,8 @@ class GlobalHeader extends React.Component {
   render() {
 
     var userHomeContent;
-    if(this.props.user){
-      userHomeContent = <UserHome handleLogout={this.handleLogout.bind(this)} {...this.props} />;
+    if(this.state.user){
+      userHomeContent = <UserHome handleLogout={this.handleLogout.bind(this)} user={this.state.user} />;
     } else {
       userHomeContent = <UserLoginForm handleLogin={this.handleLogin.bind(this)} handleGetLoginInfo={this.handleGetLoginInfo.bind(this)} />;
     }

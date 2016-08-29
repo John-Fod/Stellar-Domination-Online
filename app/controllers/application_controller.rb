@@ -13,8 +13,13 @@ class ApplicationController < ActionController::Base
 
   def require_logged_in_user
     unless logged_in_user
-      return :message => "You must be logged in to do that."
-      #render json: "{'error': 'You must be logged to do that.'}"
+      response = Hash.new
+      response["bulletin"] = Hash.new
+      response["bulletin"]["typd"] = "error"
+      response["bulletin"]["title"] = "Login Required"
+      response["bulletin"]["messages"] = []
+      response["bulletin"]["messages"].push("You must be logged in to do that.")
+      render json: response
     end
   end
   helper_method :require_logged_in_user

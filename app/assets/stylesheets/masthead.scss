@@ -1,0 +1,84 @@
+@import "apps.scss";
+
+#masthead{
+  @extend .instrument;
+  height:40px;
+  margin:0px;
+  padding:0px;
+
+  ul{
+  	margin:0px;
+  	padding:0px;
+
+  	li{
+  	  vertical-align:top;
+  	  position:relative;
+  	  border-left:2px solid $inst-border;
+  	  border-right:2px solid $inst-border;
+  	  background-color:lighten($inst-base, 5%);
+  	  display:inline-block;
+  	  margin:0px 10px;
+  	  padding:0px 10px;
+  	  height:40px;
+
+  	  &:hover{
+  	  	background-color:lighten($inst-base, 15%);
+  	  	height:42px;
+  	  }
+
+  	  //-----------------------------------------------
+  	  //--This is where the user will manage themselves
+  	  &#user-home-content{
+
+  	  	h6{
+  	  	  display:inline-block;
+  	  	  width:100%;
+  	  	  vertical-align:top;
+  	  	}
+
+  	  	ul{
+  	  	  display:none;
+  	  	  position:absolute;
+  	  	  top:42px;
+  	  	  left:-2px;
+  	  	  border:2px solid $inst-border;
+  	  	  border-top:none;
+  	  	  padding-top:20px;
+  	  	  background-color:lighten($inst-base, 15%);
+
+  	  	  li{
+  	  	  	display:block;
+  	  		border-left:none;
+  	  		border-right:none;
+  	 		background-color:lighten($inst-base, 15%);
+  	  	  	width:250px;
+  	  	  	height:25px;
+  	  	  	font-size:12px;
+
+  	  	  	&:hover{
+  	  	  	  height:25px;
+  	  	  	}
+
+  	  	  	label{
+  	  	  	  margin-right:10px;
+  	  	  	  width:30%;
+  	  	  	}
+
+  	  	  	input{
+  	  	  	  width:60%;
+  	  	  	}
+  	  	  }
+  	  	}
+
+  	  	&:hover{
+
+  	  	  ul{
+  	  	  	display:block;
+  	  	  }
+  	  	}
+  	  }
+  	}
+  }
+
+
+}

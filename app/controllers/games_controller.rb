@@ -1,9 +1,20 @@
 class GamesController < ApplicationController
 
-  before_action :require_logged_in_user, only: [:create, :update, :destroy]
+  before_action :require_logged_in_user, only: [:index, :create, :update, :destroy]
 
   def index
-
+    response = Hash.new
+    response["user"] = logged_in_user
+    response["games"] = logged_in_user.hosting
+    if(response["games"])
+      render json:response
+    else
+      response["bulletin"] = Hash.new
+      response["bulletin"]["type"] = "error"
+      response["bulletin"]["title"] = "Error Retrieving Games"
+      response["bulletin"]["messages"] = []
+      response["bulletin"]["messages"].push("There was a proplem retrieving data from the server.")
+    end
   end
 
 
@@ -19,6 +30,7 @@ class GamesController < ApplicationController
       response["bulletin"]["type"] = "notification"
       response["bulletin"]["title"] = "Game Created"
       response["bulletin"]["messages"].push("New Game #{@game.name} has been created.")
+      response["games"] = logged_in_user.hosting
       render json: response
     else
       response["bulletin"]["type"] = "error"

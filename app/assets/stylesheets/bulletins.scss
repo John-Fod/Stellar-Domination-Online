@@ -1,0 +1,31 @@
+@import "apps.scss";
+
+.bulletin{
+  margin:5px;
+  text-align:center;
+  border:2px solid grey;
+
+  h4{
+  	font-size:16px;
+  	font-weight:bold;
+  	line-height:1.2em;
+  }
+
+  ul{
+  	margin:10px 20px;
+  	li{
+  	  font-style:italic;
+  	}
+  }
+}
+
+.notification{
+  @extend .bulletin;
+  border-color:$app-green;
+  background-color:lighten($app-green, 50%);
+}
+
+.error{
+  @extend .bulletin;
+
+}

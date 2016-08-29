@@ -7,8 +7,11 @@ class Game < ApplicationRecord
 
   #-------------------------------
   #  ASSOCIATIONS  ---------------
-  #belongs_to :host, :class_name => "User", :primary_key => "id", :foreign_key => "host"
   belongs_to :host, class_name: "User", foreign_key: "host"
+
+  #-------------------------------
+  #  DEFAULTS  -------------------
+  default_scope { order("updated_at DESC") }
 
 
 end

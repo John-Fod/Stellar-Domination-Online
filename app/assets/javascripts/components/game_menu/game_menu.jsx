@@ -3,9 +3,29 @@ class GameMenu extends React.Component {
   constructor() {
     super();
     this.state = {
-      fds: "what"
     }
 
+
+  }
+
+  componentDidMount() {
+    //---------------
+    //  Get the games
+    $.get( "/games", function(data) {
+      if(data.user){
+        this.setState({
+          games: data.games
+        })
+      } else {
+        document.getElementById('game-menu-holder').innerHTML='';
+      }
+    }.bind(this))
+      .done(function(){
+
+      }.bind(this))
+      .fail(function(){
+        alert("fail to fetch game data. Problem with the server.");
+      })
   }
 
 
@@ -22,16 +42,9 @@ class GameMenu extends React.Component {
         ReactDOM.render(
           <Bulletin bulletin={this.state.bulletin} />,
           messageHolder
-        );          
+        );
         if(this.state.bulletin.type != 'alert'){
-          //Render the GameList again, this time with the new game
-          var newGames = this.props.games.slice()
-          newGames.push(data.game);
-          this.setState({games: newGames});
-          ReactDOM.render(
-            <GameList handleGameDelete={this.handleGameDelete.bind(this)} games={this.state.games} />,
-            document.getElementById('game-list-holder')
-          );
+          this.setState({games: data.games});
         }
     }.bind(this))
       .done(function(){
@@ -49,18 +62,13 @@ class GameMenu extends React.Component {
       url: deleteURL,
       type: "delete",
       success: function(data){
-          //Render the message that the game was created
-          this.setState({bulletin: data.bulletin});
-          ReactDOM.render(
-            <Bulletin bulletin={this.state.bulletin} />,
-            messageHolder
-          );
-          this.setState({games: data.games});
-          ReactDOM.render(
-            <GameList handleGameDelete={this.handleGameDelete.bind(this)} games={this.state.games} />, 
-            document.getElementById('game-list-holder')
-          );
-
+        //Render the message that the game was created
+        this.setState({bulletin: data.bulletin});
+        ReactDOM.render(
+          <Bulletin bulletin={this.state.bulletin} />,
+          messageHolder
+        );
+        this.setState({games: data.games});
       }.bind(this),
       fail: function(data){
         alert("Failed");
@@ -70,7 +78,7 @@ class GameMenu extends React.Component {
 
   
   render() {
-    if(this.props.games){
+    if(this.state.games){
       return (
         <div>
           <div id="game-menu-message-holder"></div>
@@ -78,7 +86,7 @@ class GameMenu extends React.Component {
             <GameCreateForm handleGetGameInfo={this.handleGetGameInfo.bind(this)} handleCreateGame={this.handleCreateGame.bind(this)}  />
           </div>
           <div id="game-list-holder">
-            <GameList games={this.props.games} handleGameDelete={this.handleGameDelete.bind(this)} />
+            <GameList games={this.state.games} handleGameDelete={this.handleGameDelete.bind(this)} />
           </div>
         </div>
       )
