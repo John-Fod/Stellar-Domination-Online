@@ -7,7 +7,7 @@ class GameParcel extends React.Component{
 
   render() {
     return(
-      <article className="game-list">
+      <article className="game parcel">
       	<header>
       		<h5>{this.props.game.name}</h5>
       		<dl>

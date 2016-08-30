@@ -8,8 +8,8 @@ class UserLoginForm extends React.Component {
 
   render() {
     return (
-      <section class="user-home-content-menu">
-        <h6>Login/Register</h6>
+      <section className="user-home-content-menu">
+        <h6>Login</h6>
         <form className='user login' onSubmit={this.props.handleLogin}>
           <ul>
             <li>

@@ -62,9 +62,9 @@ class UsersController < ApplicationController
 
 
   def create
-    @user = User.new(user_params)
+    @user = User.new(create_params)
     response = Hash.new
-    response["bulletin"]
+    response["bulletin"] = Hash.new
     response["bulletin"]["messages"] = []
 
     if @user.save
@@ -106,7 +106,7 @@ class UsersController < ApplicationController
 
   private
 
-    def user_params
+    def create_params
       params.require(:user).permit(
         :username,
         :email,

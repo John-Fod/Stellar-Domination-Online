@@ -23,6 +23,7 @@
   @extend .bulletin;
   border-color:$app-green;
   background-color:lighten($app-green, 50%);
+  color:darken($app-green, 17%);
 }
 
 .error{

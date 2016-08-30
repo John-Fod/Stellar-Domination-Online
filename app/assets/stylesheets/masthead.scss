@@ -28,7 +28,7 @@
 
   	  //-----------------------------------------------
   	  //--This is where the user will manage themselves
-  	  &#user-home-content{
+  	  &.user-home-content{
 
   	  	h6{
   	  	  display:inline-block;
@@ -48,15 +48,14 @@
 
   	  	  li{
   	  	  	display:block;
-  	  		border-left:none;
-  	  		border-right:none;
-  	 		background-color:lighten($inst-base, 15%);
+  	  		  border-left:none;
+  	  		  border-right:none;
+  	 		    background-color:lighten($inst-base, 15%);
   	  	  	width:250px;
-  	  	  	height:25px;
+  	  	  	height:inherit;
   	  	  	font-size:12px;
 
   	  	  	&:hover{
-  	  	  	  height:25px;
   	  	  	}
 
   	  	  	label{

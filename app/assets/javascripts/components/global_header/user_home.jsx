@@ -7,7 +7,7 @@ class UserHome extends React.Component {
 
   render() {
     return (
-      <section class="user-home-content-menu">
+      <section className="user-home-content-menu">
         <h6>{this.props.user.username}</h6>
         <ul>
           <li>Settings</li>

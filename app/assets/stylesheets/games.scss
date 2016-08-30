@@ -1,0 +1,54 @@
+@import "apps.scss";
+
+#game-menu{
+  @extend .instrument;
+  margin:20px 20px 0px 0px;
+  border-left:none;
+  max-width: 300px;
+
+  .bulletin, .notification, .error{
+  	margin-left:0px;
+  	border-left:none;
+    padding:5px 7px;
+    margin:5px 10px 5px 0px;
+  }
+}
+
+#game-creation-form-holder{
+  border:2px solid $inst-border;
+  border-left:none;
+  margin: 5px 10px 5px 0px;
+  padding:5px;
+  background-color:lighten($inst-base, 15%);
+
+  ul{
+  	padding:0px;
+
+  	li{
+  	  margin:5px 0px;
+  	}
+  }
+}
+
+#game-list-holder{
+  border:2px solid $inst-border;
+  border-left:none;
+  margin:5px 10px 5px 0px;
+  max-height: 300px;
+  overflow-y:scroll;
+  
+  ul{
+  	padding:0px;
+
+  	li{
+  	  margin:5px 10px;
+  	}
+  }
+
+}
+
+.parcel.game{
+  background-color:lighten($inst-base, 15%);
+  border:$inst-border;
+  padding:5px 7px;
+}

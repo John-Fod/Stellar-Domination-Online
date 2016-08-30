@@ -35,7 +35,7 @@ class GameMenu extends React.Component {
 
   handleCreateGame(e){
   	e.preventDefault();
-    var messageHolder = document.getElementById('game-menu-message-holder');
+    var messageHolder = document.getElementById('game-menu-bulletin-holder');
     messageHolder.innerHTML = "";
     $.post( "/games/create", { game: this.state }, function(data) {
         this.setState({bulletin: data.bulletin});
@@ -56,13 +56,13 @@ class GameMenu extends React.Component {
 
   handleGameDelete(id){
     var deleteURL = "/games/" + id;
-    var messageHolder = document.getElementById('game-menu-message-holder');
+    var messageHolder = document.getElementById('game-menu-bulletin-holder');
     messageHolder.innerHTML = "";
     $.ajax({
       url: deleteURL,
       type: "delete",
       success: function(data){
-        //Render the message that the game was created
+        //Render the bulletin that the game was created
         this.setState({bulletin: data.bulletin});
         ReactDOM.render(
           <Bulletin bulletin={this.state.bulletin} />,
@@ -80,9 +80,9 @@ class GameMenu extends React.Component {
   render() {
     if(this.state.games){
       return (
-        <div>
-          <div id="game-menu-message-holder"></div>
-          <div>
+        <div id="game-menu">
+          <div id="game-menu-bulletin-holder"></div>
+          <div id="game-creation-form-holder">
             <GameCreateForm handleGetGameInfo={this.handleGetGameInfo.bind(this)} handleCreateGame={this.handleCreateGame.bind(this)}  />
           </div>
           <div id="game-list-holder">

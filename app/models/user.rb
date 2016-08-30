@@ -43,8 +43,10 @@ class User < ApplicationRecord
   #--Either the username or password can be entered as the
   #identification argument.
   def self.authenticate(identification, password)
+    puts "-----------------Searching for #{identification}"
     user = find_by_username(identification) unless user = find_by_email(identification)
     if user && user.password_hash == BCrypt::Engine.hash_secret(password, user.password_salt)
+      puts "----------------Returned user #{user.username}"
       return user
     else
       nil
