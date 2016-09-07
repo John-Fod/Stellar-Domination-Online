@@ -14,12 +14,29 @@
   }
 }
 
+#game-hud-main{
+  margin:auto;
+  text-align:center;
+  padding:inherit 10px 10px 10px;
+  background-color:$ship-glass;
+
+  h1{
+    margin:0px;
+    padding:0px 10px;
+    line-height:1.2em;
+    font-size:28px;
+    font-weight:bold;
+    color:darken($ship-glass, 50%);
+    text-shadow: 2px 2px 2px darken($ship-glass, 100%), -2px -2px -2px lighten($ship-glass, 100%);
+  }
+}
+
 #game-creation-form-holder{
   border:2px solid $inst-border;
   border-left:none;
   margin: 5px 10px 5px 0px;
   padding:5px;
-  background-color:lighten($inst-base, 15%);
+  background-color:lighten($ship-glass, 15%);
 
   ul{
   	padding:0px;
@@ -30,25 +47,69 @@
   }
 }
 
-#game-list-holder{
-  border:2px solid $inst-border;
-  border-left:none;
-  margin:5px 10px 5px 0px;
-  max-height: 300px;
-  overflow-y:scroll;
-  
+
+.game-list-holder{
+  width: 400px;
+
   ul{
-  	padding:0px;
 
-  	li{
-  	  margin:5px 10px;
-  	}
+    li{
+      margin:5px 0px 5px 0px;
+
+      &:last-child{
+        margin-bottom:25px;
+      }
+    }
   }
-
 }
 
 .parcel.game{
-  background-color:lighten($inst-base, 15%);
-  border:$inst-border;
+  @include box-shadow(-25px, 0px, 25px, darken($ship-grey, 13%), inset);
+  background-color:lighten($ship-glass, 15%);
+  border:2px solid darken($ship-grey, 20%);
+
+  header{
+
+    h5{
+      display:inline-block;
+      font-size:16px;
+      text-align:left;
+      margin:0px;
+    }
+
+    dl{
+      display:inline-block;
+      vertical-align:top;
+      margin-left:5px;
+      font-size:10px;
+      font-style:italic;
+      dt,dd{
+        display:inline-block;
+        margin:0px;
+      }
+      dt{
+        &:after{
+          content:":";
+        }
+      }
+
+      dd{
+        margin-left:5px;
+      }
+    }
+  }
+
+  button.delete{
+    font-size:10px;
+    padding:1px 2px;
+  }
+
+
+  .left-bound & {
+    @include rounded(10px, 0px, 0px, 10px);
+    border-right:none;
+  }
+
+
   padding:5px 7px;
 }

@@ -43,7 +43,7 @@ class GlobalHeader extends React.Component {
           <Bulletin bulletin={this.state.bulletin} />,
           document.getElementById('main-bulletin-holder')
         );
-        document.getElementById('game-menu-holder').innerHTML='';
+        document.getElementById('app-holder').innerHTML='';
   	}.bind(this))
   	  .done(function(){
   	  }.bind(this))
@@ -65,8 +65,8 @@ class GlobalHeader extends React.Component {
           document.getElementById('main-bulletin-holder')
         );
         ReactDOM.render(
-          <GameMenu />,
-          document.getElementById('game-menu-holder')
+          <GameManagementPage user={data.user} />,
+          document.getElementById('app-holder')
         );
     }.bind(this))
       .done(function(){

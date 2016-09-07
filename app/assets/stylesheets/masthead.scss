@@ -2,9 +2,13 @@
 
 #masthead{
   @extend .instrument;
+  position:absolute;
+  top:0px;
+  left:0px;
   height:40px;
   margin:0px;
   padding:0px;
+  width:100%;
 
   ul{
   	margin:0px;

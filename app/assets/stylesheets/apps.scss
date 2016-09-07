@@ -18,14 +18,73 @@ $inst-stop: rgba(182,46,0,1);
 $inst-off: rgba(229,75,23,1);
 $inst-text-color: rgba(185,228,247,1);
 
+//********************
+//--GREY COLORS
+$ship-grey: rgba(140,156,171,1);
+$ship-glass: rgba(140,156,171,0.45);
+
+
+@mixin linear-gradient($direction, $color-stops...) {
+  background: nth(nth($color-stops, 1), 1);
+  background: -webkit-linear-gradient(legacy-direction($direction), $color-stops);
+  background: linear-gradient($direction, $color-stops);
+}
+
+@mixin rounded($top-left: 0.5em, $top-right: 0.5em, $bottom-right: 0.5em, $bottom-left: 0.5em) {
+  -webkit-border-radius: $top-left $top-right $bottom-right $bottom-left;
+  -moz-border-radius: $top-left $top-right $bottom-right $bottom-left;
+  border-radius: $top-left $top-right $bottom-right $bottom-left;
+}
+
+@mixin box-shadow($top, $left, $blur, $color, $inset: false) {
+  @if $inset {
+    -webkit-box-shadow:inset $top $left $blur $color;
+    -moz-box-shadow:inset $top $left $blur $color;
+    box-shadow:inset $top $left $blur $color;
+  } @else {
+    -webkit-box-shadow: $top $left $blur $color;
+    -moz-box-shadow: $top $left $blur $color;
+    box-shadow: $top $left $blur $color;
+  }
+}
+
+
 body{
+  background-image: image-url("space-background.jpg");
   margin:0px;
-  padding:0px;
+  padding:60px 0px 0px 0px;
 }
 
 ul{
   li{
     list-style:none;
+  }
+}
+
+button{
+  @include rounded(2px, 2px, 2px, 2px);
+  @include box-shadow(-2px, -2px, 2px, darken($ship-grey, 10%), inset);
+  border:2px solid darken($ship-grey, 10%);
+  background-color:lighten($ship-glass, 30%);
+  padding:3px;
+  font-size:10px;
+
+  &:hover{
+  @include box-shadow(-2px, -2px, 2px, darken($ship-grey, 20%), inset);
+  background-color:lighten($ship-glass, 10%);
+  }
+
+  &.delete{
+    @include box-shadow(0, 0, 0, rgba(255,255,255,0), inset);
+    border-color:$app-red;
+    color:$app-red;
+    background-color:lighten(mix($ship-glass, $app-red), 30%);
+
+    &:hover{
+      border-color:darken($app-red, 15%);
+      color:darken($app-red, 15%);
+      background-color:lighten(mix($ship-glass, $app-red), 10%);
+    }
   }
 }
 
@@ -35,9 +94,32 @@ ul{
 //--with the application. They should look like
 //--something found in a spaceship.
 .instrument{
-  background-color:$inst-base;
-  border:2px solid $inst-border;
-  color:$inst-text-color;
+  @include linear-gradient($ship-glass, lighten($ship-glass, 10%));
+  @include box-shadow(-25px, 0px, 25px, darken($ship-grey, 20%), inset);
+  border: 2px solid darken($ship-grey, 20%);
+  color:darken($ship-grey, 60%);
+  margin:10px;
+
+  &.left-bound{
+    margin-left: 0px;
+    border-left: none;
+    @include rounded(0px, 20px, 20px, 0px);
+  }
+
+  &.right-bound{
+    margin-right: 0px;
+    border-right: none;
+    @include rounded(20px, 0px, 0px, 20px);
+  }
+
+  &.top-bound{
+    position:relative;
+    top:-60px;
+    padding-top:50px;
+    margin-top: 0px;
+    border-top: none;
+    @include rounded(0px, 0px, 20px, 20px);
+  }
 
   a{
   	color:$inst-text-color;

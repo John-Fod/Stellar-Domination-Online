@@ -87,10 +87,10 @@ class UsersController < ApplicationController
       #--Creation Failed
       response["bulletin"]["type"] = "error"
       response["bulletin"]["title"] = "Account Creation Failed"
-      @user.errors.each do |error|
-        response["bulletin"]["messages"].push(error)
+      @user.errors.full_messages.each do |new_message|
+        response["bulletin"]["messages"].push(new_message)
       end
-      render json: response, status: unprocessable_entity
+      render json: response
     end
   end
 

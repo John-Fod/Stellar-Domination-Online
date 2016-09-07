@@ -43,7 +43,7 @@ class GameMenu extends React.Component {
           <Bulletin bulletin={this.state.bulletin} />,
           messageHolder
         );
-        if(this.state.bulletin.type != 'alert'){
+        if(this.state.bulletin.type != 'error'){
           this.setState({games: data.games});
         }
     }.bind(this))

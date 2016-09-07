@@ -1,4 +1,4 @@
-class GameParcel extends React.Component{
+class GameJoinableParcel extends React.Component{
 
   handleDeleteClick(id){
     this.props.handleGameDelete(id);
@@ -16,8 +16,8 @@ class GameParcel extends React.Component{
       		</dl>
       	</header>
 
-        <div className="delete">
-          <button onClick={ () => this.handleDeleteClick(this.props.game.id)} >Delete</button>
+        <div>
+          JOIHN THIS GAME
         </div>
       </article>
 
