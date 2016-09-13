@@ -50,9 +50,13 @@ $ship-glass: rgba(140,156,171,0.45);
 
 
 body{
-  background-image: image-url("space-background.jpg");
+  //background-image: image-url("space-background.jpg");
   margin:0px;
   padding:60px 0px 0px 0px;
+}
+
+div{
+  background-color:grey;
 }
 
 ul{

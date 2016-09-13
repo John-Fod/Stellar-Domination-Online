@@ -24,13 +24,16 @@ class GamePlayPage extends React.Component {
         this.setState({
           game: data,
           players: data.players,
+          logged_in_player: data.logged_in_player,
           frames: data.frames,
           ships: data.ships
         });
         //IF THE USER MUST SELECT A SHIP FIRST
         if(this.state.game.cur_round == 0){
+
+        alert(JSON.stringify(logged_in_player_ships));
           ReactDOM.render(
-            <SelectShips ships={this.state.ships} frames={this.state.frames} />,
+            <SelectShips logged_in_player={this.state.logged_in_player} ships={this.state.logged_in_player.ships} frames={this.state.frames} />,
             document.getElementById("game-play-menu")
           );
         }

@@ -32,10 +32,17 @@ class SelectShips extends React.Component {
 
   
   render() {
+  	alert(JSON.stringify(this.props));
+  	var playerShips = [];
+  	for(var i = 0; i < this.props.ships.length; i++){
+  	  if(this.props.ships[i]["player_id"] == this.props.logged_in_player_user["id"])
+  	  	playerShips.push(this.props.ships[i]);
+  	}
+  	alert(JSON.stringify(playerShips));
 
     return (
       <section id="ship-selection-main" className="instrument left-bound">
-      	<h2>Select Your Ships</h2>
+      	<h2>Select Your Ships</h2> 
       </section>
     )
   }

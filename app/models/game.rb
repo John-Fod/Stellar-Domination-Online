@@ -36,18 +36,42 @@ class Game < ApplicationRecord
 
 
 
-  def state cur_player=nil
+  def state show_opponent_ships=false, cur_user=false
     game_state = self.attributes
+    if cur_user
+      player_of_logged_in_user = Player.where(["game_id = ?", self.id]).where(["user_id = ?", cur_user.id]).first
+    end
     game_state["host"] = self.host.attributes.except('email', 'password_hash', 'password_salt', 'auth_token')
     game_state["players"] = []
     self.players.each do |player|
       cur_player = player.attributes
       cur_player["user"] = player.user.attributes.except('email', 'password_hash', 'password_salt', 'auth_token')
       cur_player["ships"] = []
-      player.ships.each do |ship|
-        cur_player["ships"].push(ship.attributes)
+      #-- SHOW ALL OF THE SHIPS IN THE GAME
+      if show_opponent_ships == true
+        player.ships.each do |ship|
+          cur_player["ships"].push(ship.attributes)
+        end
+      #-- ONLY SHOW SHIPS OF THE cur_user
+      else
+        if player == cur_user
+          Ship.where(["game_id = ?", self.id]).where(["player_id = ?", player_of_logged_in_user.id]).each do |ship|
+            cur_player["ships"].push(ship.attributes)
+          end
+        end
       end
       game_state["players"].push(cur_player)
+      #-------------------------------------------------------
+      #-- IF THERE IS A LOGGED IN PLAYER, SEND THEIR USER INFO
+      if player_of_logged_in_user
+        game_state["logged_in_player"] = player_of_logged_in_user.attributes
+        game_state["logged_in_player"]["user"] = cur_user.attributes.except('email', 'password_hash', 'password_salt', 'auth_token')
+        game_state["logged_in_player"]["ships"] = []
+        player_of_logged_in_user.ships.each do |ship|
+          game_state["logged_in_player"]["ships"].push(ship.attributes)
+        end
+
+      end
     end
     game_state["frames"] = Ship.frames
 

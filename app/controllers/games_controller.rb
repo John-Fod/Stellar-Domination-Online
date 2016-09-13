@@ -36,7 +36,14 @@ class GamesController < ApplicationController
   end
 
   def state
-    response = Game.find(params[:id]).state logged_in_user
+    game = Game.find(params[:id])
+    if game.completed
+      response = game.state(true, logged_in_user)
+    elsif game.cur_round == 0 #-- Do not show opponent's ships
+      response = game.state(false, logged_in_user)
+    else #-- Show the oppenent's ships
+      response = game.state(true, logged_in_user)
+    end
     render json:response
   end
 
