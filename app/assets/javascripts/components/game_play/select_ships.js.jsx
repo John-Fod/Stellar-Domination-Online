@@ -19,7 +19,6 @@ class SelectShips extends React.Component {
       url: framesURL,
       type: "get",
       success: function(data){
-      	alert(JSON.stringify(data.frames));
         this.setState({
           frames: data.frames
         });
@@ -32,17 +31,39 @@ class SelectShips extends React.Component {
 
   
   render() {
-  	alert(JSON.stringify(this.props));
-  	var playerShips = [];
-  	for(var i = 0; i < this.props.ships.length; i++){
-  	  if(this.props.ships[i]["player_id"] == this.props.logged_in_player_user["id"])
-  	  	playerShips.push(this.props.ships[i]);
-  	}
-  	alert(JSON.stringify(playerShips));
+    var self = this
+    var frames = this.props.frames
+    //alert(JSON.stringify(frames));
 
     return (
       <section id="ship-selection-main" className="instrument left-bound">
-      	<h2>Select Your Ships</h2> 
+      	<h2>Select Your Ships</h2>
+        <ul>
+          {
+            this.props.ships.map(function(curShip){
+              return(
+                <li key={curShip.id}>
+                  <h5>{curShip.frame} - {curShip.id}</h5>
+                  <form id={"ship_" + curShip.id} >
+                    <select onChange={ (e) => self.props.handleShipFrameChange(curShip.id, e) } value={curShip.frame} id={"ship_frame_" + curShip.id} name={"ship_frame_" + curShip.id} htmlFor={"ship_" + curShip.id} >
+                      {
+                        frames.map(function(curFrame){
+                          return (
+                            <option key={curShip.id + curFrame.name} value={curFrame.name}>{curFrame.name}</option>
+                          );
+                        })
+                      }
+                    </select>
+                    <input type="submit" onClick={ () => self.props.handleUpdateShipFrame(curShip.id)} value="Update" />
+                  </form>
+                </li>
+              );
+            })
+          }
+
+
+
+        </ul>
       </section>
     )
   }

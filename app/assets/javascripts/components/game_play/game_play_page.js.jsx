@@ -30,16 +30,58 @@ class GamePlayPage extends React.Component {
         });
         //IF THE USER MUST SELECT A SHIP FIRST
         if(this.state.game.cur_round == 0){
-
-        alert(JSON.stringify(logged_in_player_ships));
           ReactDOM.render(
-            <SelectShips logged_in_player={this.state.logged_in_player} ships={this.state.logged_in_player.ships} frames={this.state.frames} />,
+            <SelectShips handleShipFrameChange={this.handleShipFrameChange.bind(this)} handleUpdateShipFrame={this.handleUpdateShipFrame.bind(this)} logged_in_player={this.state.logged_in_player} ships={this.state.logged_in_player.ships} frames={this.state.frames} />,
+            document.getElementById("game-play-menu")
+          );
+          //alert(JSON.stringify(this.state.logged_in_player.ships));
+        }
+      }.bind(this),
+      fail: function(data){
+        alert("Failed");
+      }.bind(this)
+    })
+  }
+
+  handleShipFrameChange(updatedShipId, e){
+    var updateShipURL = "/games/" + this.state.game.id + "/ships/" + updatedShipId;
+    $.ajax({
+      url: updateShipURL,
+      type: "put",
+      data: {frame: e.target.value},
+      success: function(data){
+        this.setState({
+          game: data,
+          players: data.players,
+          logged_in_player: data.logged_in_player,
+          frames: data.frames,
+          ships: data.ships
+        });
+        //IF THE USER MUST SELECT A SHIP FIRST
+        if(this.state.game.cur_round == 0){
+          ReactDOM.render(
+            <SelectShips handleShipFrameChange={this.handleShipFrameChange.bind(this)} handleUpdateShipFrame={this.handleUpdateShipFrame.bind(this)} logged_in_player={this.state.logged_in_player} ships={this.state.logged_in_player.ships} frames={this.state.frames} />,
             document.getElementById("game-play-menu")
           );
         }
       }.bind(this),
       fail: function(data){
         alert("Failed");
+      }.bind(this)
+    })
+  }
+
+
+  handleUpdateShipFrame(id){
+    var shipUpdateURL = "/ships/" + id;
+    $.ajax({
+      url: shipUpdateURL,
+      type: "put",
+      success: function(data){
+        alert("SUCCESS");
+      }.bind(this),
+      fail: function(data){
+        alert("Failed to Ready");
       }.bind(this)
     })
   }
@@ -80,10 +122,16 @@ class GamePlayPage extends React.Component {
             <th>Ready</th>
           </tr>
           {this.state.players.map(function(curPlayer){
+            var ready_or_waiting;
+            if(curPlayer.ready){
+              ready_or_waiting = "Ready";
+            } else {
+              ready_or_waiting = "Not Ready";
+            }
             return(
               <tr key={curPlayer.id}>
                 <td >{curPlayer.user.username}</td>
-                <td >{curPlayer.ready.toString}</td>
+                <td >{ready_or_waiting}</td>
               </tr> );
           })}
           </tbody>

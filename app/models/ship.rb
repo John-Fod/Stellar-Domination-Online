@@ -1,5 +1,7 @@
 class Ship < ApplicationRecord
 
+  self.default_scope{order('id DESC')}
+
   #-------------------------------
   #  VALIDATIONS  ----------------
   validates :game_id, presence: { message: "Every ship needs a game."}

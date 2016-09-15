@@ -1,13 +1,14 @@
 class GamesController < ApplicationController
 
-  before_action :require_logged_in_user, only: [:index, :game_state, :join_random_game, :create, :update, :destroy]
-  before_action :require_game_player, only: [:game_state]
-  before_action :require_game_host, only: [:destroy]
+  before_action :require_logged_in_user, only: [:index, :state, :join_random_game, :create, :update, :destroy]
+  before_action :get_valid_game, only: [:state, :show, :destroy]
+  before_action :require_valid_game_player, only: [:state]
+  before_action :require_VALID_game_host, only: [:destroy]
 
   def index
     response = Hash.new
-    response["user"] = logged_in_user
-    response["joined"] = logged_in_user.games
+    response["user"] = @logged_in_user
+    response["joined"] = @logged_in_user.games
     if(response["joined"])
       render json:response
     else
@@ -22,8 +23,8 @@ class GamesController < ApplicationController
 
   def joinable
     response = Hash.new
-    response["user"] = logged_in_user
-    response["joinable"] = logged_in_user.joinable_games
+    response["user"] = @logged_in_user
+    response["joinable"] = @logged_in_user.joinable_games
     if(response["joinable"])
       render json:response
     else
@@ -36,17 +37,19 @@ class GamesController < ApplicationController
   end
 
   def state
-    game = Game.find(params[:id])
-    if game.completed
-      response = game.state(true, logged_in_user)
-    elsif game.cur_round == 0 #-- Do not show opponent's ships
-      response = game.state(false, logged_in_user)
+    if @game.completed
+      response = @game.state(true, @logged_in_user)
+    elsif @game.cur_round == 0 #-- Do not show opponent's ships
+      response = @game.state(false, @logged_in_user)
     else #-- Show the oppenent's ships
-      response = game.state(true, logged_in_user)
+      response = @game.state(true, @logged_in_user)
     end
     render json:response
   end
 
+
+#-------------------------------------------------------
+#-- MARK FOR DELETION ----------------------------------
   def show
     @game = Game.find(params[:id])
     response = Hash.new
@@ -91,6 +94,7 @@ class GamesController < ApplicationController
       response["bulletin"]["title"] = "Game Created"
       response["bulletin"]["messages"].push("New Game #{@game.name} has been created.")
       response["hosting"] = logged_in_user.hosting
+      response["joined"] = logged_in_user.games
       render json: response
     else
       response["bulletin"]["type"] = "error"
@@ -114,11 +118,13 @@ class GamesController < ApplicationController
       response["bulletin"]["title"] = "Game #{@game.name} Deleted"
       response["bulletin"]["messages"] = ["#{@game.name} is no longer available."]
       response["hosting"] = logged_in_user.hosting
+      response["joined"] = logged_in_user.games
       render json:response
     else
       response["type"] = "alert"
       response["title"] = "Game #{@game.name} Deletion Failed"
       response["messages"] = []
+      response["joined"] = logged_in_user.games
       render json:response
     end
   end
@@ -134,10 +140,12 @@ class GamesController < ApplicationController
       response["bulletin"]["type"] = "notification"
       response["bulletin"]["title"] = "Game Joined"
       response["bulletin"]["messages"].push("You are now plaing in the game #{game.name}")
+      response["joined"] = logged_in_user.games
     else
       response["bulletin"]["type"] = "error"
       response["bulletin"]["title"] = "No Games to Join"
       response["bulletin"]["messages"].push("There are not any available games.")
+      response["joined"] = logged_in_user.games
     end
     render json:response
   end
@@ -193,6 +201,7 @@ class GamesController < ApplicationController
           response["bulletin"]["title"] = "You do not have permission to delete that game"
           response["bulletin"]["messages"] = []
           response["bulletin"]["messages"].push("Only the host of a game can delete it.")
+          response["joined"] = logged_in_user.games
           render json:response
         end
       end

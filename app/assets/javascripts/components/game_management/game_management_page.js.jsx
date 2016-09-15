@@ -84,20 +84,26 @@ class GameManagementPage extends React.Component {
 
   handleJoinRandomGame(e){
     e.preventDefault;
+    var messageHolder = document.getElementById('game-management-bulletin-holder');
 
     //---------------
     //  Get the games
     $.get( "/games/join_random_game", function(data) {
       this.setState({
         joined: data.joined,
-        joined_games: data.joined_games
+        joined_games: data.joined_games,
+        bulletin: data.bulletin
       })
+      ReactDOM.render(
+        <Bulletin bulletin={this.state.bulletin} />,
+        messageHolder
+      );
     }.bind(this))
       .done(function(){
 
       }.bind(this))
       .fail(function(){
-        alert("fail to fetch game data. Problem with asdfasdfasdfthe server.");
+        alert("fail to fetch game data. Problem with the server.");
       })
   }
 
@@ -106,7 +112,9 @@ class GameManagementPage extends React.Component {
   	if(this.props.user){
       return (
       	<section className="main-section" id="game-management-section" >
+
       	  <div id="game-management-bulletin-holder"></div>
+
           <div id="game-join-random-holder">
             <section>
               <button onClick={this.handleJoinRandomGame.bind(this)}>Join Random Game</button>
@@ -120,9 +128,6 @@ class GameManagementPage extends React.Component {
             <GameJoinedList games={this.state.joined} handleLoadGame={this.handleLoadGame.bind(this)} handleGameDelete={this.handleGameDelete.bind(this)} />
           </div>
 
-          <div id="game-joinable-list-holder">
-            <GameJoinableList games={this.state.joinable} />
-          </div>
         </section>
       )
     } else {

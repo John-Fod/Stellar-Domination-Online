@@ -30,6 +30,8 @@ class Game < ApplicationRecord
       cur_player["user"] = player.user.attributes.except('email', 'password_hash', 'password_salt', 'auth_token')
       game_state["players"].push(cur_player)
     end
+    safe_game["full"] = self.full?
+    safe_game["started"] = self.started?
 
     return safe_game
   end
@@ -74,6 +76,8 @@ class Game < ApplicationRecord
       end
     end
     game_state["frames"] = Ship.frames
+    game_state["full"] = self.full?
+    game_state["started"] = self.started?
 
     return game_state
   end
@@ -138,14 +142,43 @@ class Game < ApplicationRecord
     end
   end
 
+
+
   def all_players_ready?
     advance_round = true
+    #-- Check if the game is full
+    return false unless self.full?
     self.players.each do |player|
       advance_round = false if player.ready != true 
     end
     return advance_round
   end
 
+
+
+  #-------------------------------------------
+  #  FULL  -----------------------------------
+  #    This checks if the game is full or not.
+  def full?
+    if self.players.size == self.num_players
+      return true
+    else
+      return false
+    end
+  end
+
+
+  #-------------------------------------------
+  #  STARTED  --------------------------------
+  #    This checks if a game has started by
+  #  seeing if the cur_round is 0
+  def started?
+    if self.cur_round == 0
+      return false
+    else
+      return true
+    end
+  end
 
 
 
