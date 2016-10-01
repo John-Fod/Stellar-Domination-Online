@@ -1,0 +1,27 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  game_id: 1
+  name: MyString
+  origin: 1
+  target: 1
+  round: 1
+  hull_damage: 1
+  shield_damage: 1
+  hull_repair: 1
+  shield_repair: 1
+  energy_cost: 1
+  energy_gain: 1
+
+two:
+  game_id: 1
+  name: MyString
+  origin: 1
+  target: 1
+  round: 1
+  hull_damage: 1
+  shield_damage: 1
+  hull_repair: 1
+  shield_repair: 1
+  energy_cost: 1
+  energy_gain: 1

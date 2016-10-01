@@ -10,21 +10,38 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160906072643) do
+ActiveRecord::Schema.define(version: 20160929140440) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
+  create_table "actions", force: :cascade do |t|
+    t.integer  "game_id"
+    t.string   "name"
+    t.integer  "origin"
+    t.integer  "target"
+    t.integer  "round"
+    t.integer  "hull_damage"
+    t.integer  "shield_damage"
+    t.integer  "hull_repair"
+    t.integer  "shield_repair"
+    t.integer  "energy_cost"
+    t.integer  "energy_gain"
+    t.integer  "delay"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+  end
+
   create_table "games", force: :cascade do |t|
     t.integer  "host"
     t.string   "name"
-    t.datetime "created_at",                       null: false
-    t.datetime "updated_at",                       null: false
     t.integer  "num_players",      default: 2
+    t.integer  "ships_per_player", default: 3
+    t.integer  "cur_round",        default: 0
     t.boolean  "started",          default: false
     t.boolean  "completed",        default: false
-    t.integer  "cur_round",        default: 0
-    t.integer  "ships_per_player", default: 3
+    t.datetime "created_at",                       null: false
+    t.datetime "updated_at",                       null: false
   end
 
   create_table "games_users", id: false, force: :cascade do |t|
@@ -47,6 +64,7 @@ ActiveRecord::Schema.define(version: 20160906072643) do
     t.string   "frame"
     t.integer  "sheild_health"
     t.integer  "hull_health"
+    t.integer  "energy"
     t.datetime "created_at",    null: false
     t.datetime "updated_at",    null: false
   end

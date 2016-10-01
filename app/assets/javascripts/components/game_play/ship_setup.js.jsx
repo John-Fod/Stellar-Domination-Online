@@ -4,12 +4,11 @@
 //DESCRIPTION: 
 //REQUIRED:
 //  props.frames - The different frames that can be used
-class SelectShips extends React.Component {
+class ShipSetup extends React.Component {
 
   constructor() {
     super();
     this.state = {
-      frames:null
     }
   }
 
@@ -28,11 +27,13 @@ class SelectShips extends React.Component {
       }.bind(this)
     })
   }
-
   
   render() {
     var self = this
-    var frames = this.props.frames
+    var frames = [];
+    for (var frame in this.props.frames){
+      frames.push(frame);
+    }
     //alert(JSON.stringify(frames));
 
     return (
@@ -47,11 +48,11 @@ class SelectShips extends React.Component {
                   <form id={"ship_" + curShip.id} >
                     <select onChange={ (e) => self.props.handleShipFrameChange(curShip.id, e) } value={curShip.frame} id={"ship_frame_" + curShip.id} name={"ship_frame_" + curShip.id} htmlFor={"ship_" + curShip.id} >
                       {
-                        frames.map(function(curFrame){
-                          return (
-                            <option key={curShip.id + curFrame.name} value={curFrame.name}>{curFrame.name}</option>
-                          );
-                        })
+                      	frames.map(function(curFrame){
+                      	  return(
+                      	  	<option key={curShip.id + curFrame} value={curFrame}>{curFrame}</option>
+                      	  )
+                      	})
                       }
                     </select>
                   </form>
@@ -59,9 +60,6 @@ class SelectShips extends React.Component {
               );
             })
           }
-
-
-
         </ul>
       </section>
     )

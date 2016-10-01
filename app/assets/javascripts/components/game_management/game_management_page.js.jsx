@@ -77,7 +77,7 @@ class GameManagementPage extends React.Component {
 
   handleLoadGame(id){
     ReactDOM.render(
-      <GamePlayPage gameId={id} />,
+      <GamePlayPage gameId={id} pollInterval={3000} />,
       document.getElementById('app-holder')
     );
   }

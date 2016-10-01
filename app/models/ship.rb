@@ -12,26 +12,26 @@ class Ship < ApplicationRecord
   belongs_to :player
   belongs_to :game
 
-  @@frames = [
+  @@frames = {
   	#--  BATTLESHIP
-  	battleship = {
-  	  "name" => "battleship",
-  	  "max_hull_integrity" => 1000,
-  	  "abilities" => [
+  	:battleship => {
+  	  :name => "battleship",
+  	  :max_hull_integrity => 1000,
+  	  :abilities => [
   	  	"cannon_volley",
   	  	"broadside"
   	  ]
   	},
   	#--  CRUISER
-  	cruiser = {
-  	  "name" => "cruiser",
-  	  "max_hull_integrity" => 500,
-  	  "abilities" => [
+  	:cruiser => {
+  	  :name => "cruiser",
+  	  :max_hull_integrity => 500,
+  	  :abilities => [
   	  	"cannon_volley",
   	  	"broadside"
   	  ]
   	}
-  ]
+  }
 
   def self.frames
   	@@frames
@@ -39,10 +39,14 @@ class Ship < ApplicationRecord
 
   def self.valid_frames
   	frames = []
-  	Ship.frames.each do |frame|
-  	  frames.push(frame["name"])
+  	Ship.frames.each do |key, value|
+      frames.push(value[:name])
   	end
   	return frames
+  end
+
+  def abilities
+    Ship.frames[self.frame.parameterize.underscore.to_sym][:abilities]
   end
 
 

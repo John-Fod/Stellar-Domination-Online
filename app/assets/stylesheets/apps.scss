@@ -8,6 +8,14 @@
 $app-green: rgba(69,152,14,1);
 $app-red: rgba(143, 0, 14, 1);
 
+//******************************************
+//--STANDARD COLORS
+$deep: rgba(53,16,56,1);
+$light: rgba(109,118,196,1);
+$highlight: rgba(229,113,48,1);
+$base: rgba(31,158,110,1);
+$support: rgba(107,233,167,1);
+
 
 //******************************************
 //--INSTRUMENT COLORS
@@ -56,7 +64,6 @@ body{
 }
 
 div{
-  background-color:grey;
 }
 
 ul{
@@ -98,6 +105,7 @@ button{
 //--with the application. They should look like
 //--something found in a spaceship.
 .instrument{
+/*
   @include linear-gradient($ship-glass, lighten($ship-glass, 10%));
   @include box-shadow(-25px, 0px, 25px, darken($ship-grey, 20%), inset);
   border: 2px solid darken($ship-grey, 20%);
@@ -132,5 +140,6 @@ button{
   	  color:$inst-off;
   	}
   }
+*/
 }
 

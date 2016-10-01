@@ -6,6 +6,7 @@ class CreateShips < ActiveRecord::Migration[5.0]
       t.string :frame
       t.integer :sheild_health
       t.integer :hull_health
+      t.integer :energy
 
       t.timestamps
     end
