@@ -18,4 +18,11 @@ class Player < ApplicationRecord
   #-------------------------------
   #  ACTIVE RECORD CALLBACKS  ----
 
+
+
+  def declare_ready
+    self.ready = true
+    self.save
+  end
+
 end

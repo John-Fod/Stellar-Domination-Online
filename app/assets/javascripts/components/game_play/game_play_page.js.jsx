@@ -28,28 +28,11 @@ class GamePlayPage extends React.Component {
         this.setState({
           game: data
         });
-        //SHOW THE GAME STATUS
-        /*
-        ReactDOM.render(
-          <GameStatus gameStatus={this.state.game}/>,
-          document.getElementById("game-status-main-holder")
-        );
-        //IF THE USER MUST SELECT A SHIP FIRST
-        if(this.state.game.info.started == false){
-          ReactDOM.render(
-            <ShipSetup ships={this.state.game.players.curUser.ships} frames={this.state.game.info.frames} handleShipFrameChange={this.handleShipFrameChange.bind(this)} />,
-            document.getElementById("game-play-main-holder")
-          );
-        } else {
-          ReactDOM.render(
-            <ShipsStatus players={this.state.game.players} />,
-            document.getElementById("game-play-main-holder")
-          )
-        }
-        */
       }.bind(this),
       fail: function(data){
         alert("Failed");
+      }.bind(this),
+      complete: function(data){
       }.bind(this)
     })
   }
@@ -82,16 +65,8 @@ class GamePlayPage extends React.Component {
       type: "get",
       success: function(data){
         this.setState({
-          game: data.game,
-          players: data.players
+          game: data
         });
-        //If the game hasn't started, select ships
-        if(this.state.game.started == false){
-          ReactDOM.render(
-            <SelectShips handleShipFrameChange={this.handleShipFrameChange.bind(this)} logged_in_player={this.state.logged_in_player} ships={this.state.logged_in_player.ships} frames={this.state.frames} />,
-            document.getElementById("game-play-menu")
-          );
-        }
       }.bind(this),
       fail: function(data){
         alert("Failed to Ready");
@@ -101,20 +76,20 @@ class GamePlayPage extends React.Component {
 
   
   render() {
+
     if(this.state.game){
       //-- Decide which UI the game should show
-      if(this.state.game.info.started == false){
+      if(this.state.game.info.cur_round == 0){
         gameUI = <ShipSetup ships={this.state.game.players.curUser.ships} frames={this.state.game.info.frames} handleShipFrameChange={this.handleShipFrameChange.bind(this)} />
       } else {
         gameUI = <ShipsStatus players={this.state.game.players} />
       }
       return (
-        <section id="game-hud-main" className="game-list-holder instrument top-bound">
-          <div id="game-play-bulletin-holder"></div>
-          <div id="game-status-main-holder"><GameStatus gameStatus={this.state.game} handleReady={this.handleReady}/></div>
-          <div id="game-play-main-holder">{gameUI}</div>
-          <button onClick={ () => this.handleReady(this.state.game.id)}>I'm Ready</button>
-          <div id="game-play-menu"></div>
+        <section id="game-hud-main" className="game-list-holder">
+          <div className="row" id="game-play-bulletin-holder"></div>
+          <div className="row" id="game-status-main-holder"><GameStatus gameStatus={this.state.game} handleReady={this.handleReady.bind(this)}/></div>
+          <div className="row" id="game-play-main-holder">{gameUI}</div>
+          <div className="row" id="game-play-menu"></div>
           <div> </div>
         </section>
       );
@@ -124,6 +99,7 @@ class GamePlayPage extends React.Component {
         <section></section>
       );
     }
+
 
   }
 

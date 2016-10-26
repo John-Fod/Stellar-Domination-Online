@@ -37,6 +37,39 @@ class GameManagementPage extends React.Component {
   handleGameCreate(e){
   	e.preventDefault();
     var messageHolder = document.getElementById('game-management-bulletin-holder');
+    var formHolder = $(e.target).closest(".form-holder");
+    var form = $(e.target).closest("form");
+
+    $.ajax({
+      type: "post",
+      url: '/games/create',
+      data: {game: this.state},
+      beforeSend: function(){
+        formHolder.hide();
+      }.bind(this),
+      complete: function(){
+        formHolder.show();
+      }.bind(this),
+      success: function(data){
+        //Reset the form
+        form.trigger("reset");
+        //Set the state of the bulletin and post it
+        this.setState({bulletin: data.bulletin});
+        ReactDOM.render(
+          <Bulletin bulletin={this.state.bulletin} />,
+          messageHolder
+        );
+        //If it is not an error, let the user know they joined
+        if(this.state.bulletin.type != 'error'){
+          this.setState({joined: data.joined});
+        }
+      }.bind(this),
+      fail: function(data){
+        alert("You Failed!");
+      }.bind(this)
+
+    });
+    /*
     $.post( "/games/create", { game: this.state }, function(data) {
         this.setState({bulletin: data.bulletin});
         ReactDOM.render(
@@ -52,6 +85,7 @@ class GameManagementPage extends React.Component {
       .fail(function(){
         alert("fail to create game. Problem with the server.");
       })
+    */
   }
 
   handleGameDelete(id){
@@ -111,30 +145,29 @@ class GameManagementPage extends React.Component {
   render() {
   	if(this.props.user){
       return (
-      	<section className="main-section" id="game-management-section" >
+        <div>
+          <div className="row" className="main-section" id="game-management-section" >
+            <div className="twelve columns" id="game-management-bulletin-holder"></div>
+          </div>
 
-      	  <div id="game-management-bulletin-holder"></div>
+          <div className="row">
+            <div className="six columns" id="game-joined-list-holder">
+              <GameJoinedList games={this.state.joined} handleLoadGame={this.handleLoadGame.bind(this)} handleGameDelete={this.handleGameDelete.bind(this)} />
+            </div>
 
-          <div id="game-join-random-holder">
-            <section>
+            <div className="six columns">
               <button onClick={this.handleJoinRandomGame.bind(this)}>Join Random Game</button>
-            </section>
-          </div>
-          <div id="game-create-form-holder">
-            <GameCreateForm handleGameCreate={this.handleGameCreate.bind(this)} handleGetGameInfo={this.handleGetGameInfo.bind(this)} />
-          </div>
+              <GameCreateForm handleGameCreate={this.handleGameCreate.bind(this)} handleGetGameInfo={this.handleGetGameInfo.bind(this)} />
+            </div>
 
-          <div id="game-joined-list-holder">
-            <GameJoinedList games={this.state.joined} handleLoadGame={this.handleLoadGame.bind(this)} handleGameDelete={this.handleGameDelete.bind(this)} />
           </div>
-
-        </section>
+        </div>
       )
     } else {
       return (
-      	<section className="main-section" id="no-user-section" >
-      	  <h1>Please Log In or Register</h1>
-      	</section>
+        <section className="main-section" id="no-user-section" >
+          <h1>Please Log In or Register</h1>
+        </section>
       )
     }
   }

@@ -12,9 +12,17 @@ class Bulletin extends React.Component {
   }
 
   toggleBulletin(e){
+    var self = this;
     e.preventDefault()
     if(this.state.show == true){
-      this.setState({show:false})
+      var bulletinNode = $(e.target.parentNode);
+      bulletinNode.fadeOut( 1000, function(){
+        this.setState({show:false});
+      }.bind(this));
+      //alert(e.target.parentNode.className);
+      //var element = e.target;
+      //this.hide();
+      //element.hide(2000);
     } else {
       this.setState({show:true})
     }

@@ -72,29 +72,61 @@ ul{
   }
 }
 
+dl{
+  width:100%;
+  dt{
+    //float:left;
+    //clear:left;
+    &:after{
+      content:":";
+    }
+  }
+  dd{
+    //float:left;
+  }
+}
+
+.show-hints{
+  input{
+
+    &:required{
+
+      &:valid{
+        border-color:green;
+      }
+
+      &:invalid{
+        border-color:red;
+      }
+
+    }
+  }
+}
+
 button{
   @include rounded(2px, 2px, 2px, 2px);
-  @include box-shadow(-2px, -2px, 2px, darken($ship-grey, 10%), inset);
   border:2px solid darken($ship-grey, 10%);
   background-color:lighten($ship-glass, 30%);
   padding:3px;
   font-size:10px;
 
-  &:hover{
-  @include box-shadow(-2px, -2px, 2px, darken($ship-grey, 20%), inset);
-  background-color:lighten($ship-glass, 10%);
-  }
-
   &.delete{
-    @include box-shadow(0, 0, 0, rgba(255,255,255,0), inset);
+    @include box-shadow(0, 0, 2, $app-red, inset);
     border-color:$app-red;
     color:$app-red;
-    background-color:lighten(mix($ship-glass, $app-red), 30%);
 
     &:hover{
-      border-color:darken($app-red, 15%);
-      color:darken($app-red, 15%);
-      background-color:lighten(mix($ship-glass, $app-red), 10%);
+      background-color:lighten($app-red, 45%);
+    }
+  }
+
+  &.go{
+    @include box-shadow(0,0,2, $base, inset);
+    border-color:$base;
+    color:$base;
+
+    &:hover{
+      background-color:lighten($base, 45%);
     }
   }
 }

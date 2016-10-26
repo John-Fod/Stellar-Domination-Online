@@ -57,7 +57,7 @@ class GamesController < ApplicationController
     response = Hash.new
     response["bulletin"] = Hash.new
     response["bulletin"]["messages"] = []
-    response["game"] = @game
+    response["game"] = @game.overview
 
     if @game.save
       @game.add_player logged_in_user
@@ -106,7 +106,7 @@ class GamesController < ApplicationController
     response["bulletin"]["messages"] = []
     if game
       game.add_player logged_in_user
-      response["game"] = game
+      response["game"] = game.overview
       response["bulletin"]["type"] = "notification"
       response["bulletin"]["title"] = "Game Joined"
       response["bulletin"]["messages"].push("You are now plaing in the game #{game.name}")
@@ -120,32 +120,41 @@ class GamesController < ApplicationController
     render json:response
   end
 
+
+  #*************************************************************************************
+  #DECLAIR READY 
+  #*************************************************************************************
+  #  A user declairs they are ready to advance to the next round of the game.
+  #ASSUMPTIONS  ------------------------------------------------------------------------
+  #  @logged_in_user is available - From require_logged_in_user
+  #  @game is available - From get_valid_game
+  #OUTPUT  -----------------------------------------------------------------------------
+  #  response: The state of the game. It will depend on how far along the game is.
   def declare_ready
-    response = Hash.new
-    player = Player.where(["game_id = ?", @game.id]).where(["user_id = ?", @logged_in_user.id]).first
-    player.ready = true
-    player.save
-    if @game.all_players_ready?
-      #--  IF ALL PLAYERS ARE READY, INCREMENT THE ROUND
-      @game.cur_round = @game.cur_round + 1
-      @game.save
-      #--  EVERY PLAYER'S READY STATUS IS NOW FALSE
-      @game.players.each do |player|
-        player.ready = false
-        player.save
-      end
+
+    if player = Player.where(["game_id = ?", @game.id]).where(["user_id = ?", @logged_in_user.id]).first
+      player.declare_ready
+    else
+      #-----------------
+      #-----------------
+      #-----------------
     end
+
+    @game.advance_round if @game.all_players_ready?
+
     #--  GET THE RESPONSE
-    response["players"] = []
-    @game.players.each do |player|
-      curPlayer = Hash.new
-      curPlayer["ready"] = player.ready
-      curPlayer["user"] = player.user
-      response["players"].push(curPlayer)
+    #--    The response depends on the state of the game
+    if @game.completed
+      response = @game.state(true, @logged_in_user)
+    elsif @game.cur_round == 0 #-- Do not show opponent's ships before the game starts
+      response = @game.state(false, @logged_in_user)
+    else #-- Show the oppenent's ships
+      response = @game.state(false, @logged_in_user)
     end
-    response["game"] = @game.state(false, @logged_in_user)
     render json:response
   end
+
+
 
   def frames
     response = Hash.new

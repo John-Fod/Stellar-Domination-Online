@@ -191,6 +191,17 @@ class Game < ApplicationRecord
 
   end
 
+  def advance_round
+    #--  IF ALL PLAYERS ARE READY, INCREMENT THE ROUND
+    self.cur_round = self.cur_round + 1
+    self.save
+    #--  EVERY PLAYER'S READY STATUS IS NOW FALSE
+    self.players.each do |player|
+      player.ready = false
+      player.save
+    end
+  end
+
 
   def check_if_started
     if self.players.count >= self.num_players

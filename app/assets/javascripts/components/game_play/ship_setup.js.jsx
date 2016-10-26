@@ -34,7 +34,6 @@ class ShipSetup extends React.Component {
     for (var frame in this.props.frames){
       frames.push(frame);
     }
-    //alert(JSON.stringify(frames));
 
     return (
       <section id="ship-selection-main" className="instrument left-bound">
@@ -48,11 +47,11 @@ class ShipSetup extends React.Component {
                   <form id={"ship_" + curShip.id} >
                     <select onChange={ (e) => self.props.handleShipFrameChange(curShip.id, e) } value={curShip.frame} id={"ship_frame_" + curShip.id} name={"ship_frame_" + curShip.id} htmlFor={"ship_" + curShip.id} >
                       {
-                      	frames.map(function(curFrame){
-                      	  return(
-                      	  	<option key={curShip.id + curFrame} value={curFrame}>{curFrame}</option>
-                      	  )
-                      	})
+                        frames.map(function(curFrame){
+                          return(
+                            <option key={curShip.id + curFrame} value={curFrame}>{curFrame}</option>
+                          )
+                        })
                       }
                     </select>
                   </form>
